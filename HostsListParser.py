@@ -12,9 +12,14 @@ def ParseHostsFileLine(hostsFileLine):
         hostsFileLine = hostsFileLine[0:lineContainsComment]
     
     lineData = hostsFileLine.split()
+    
+    # Here is a slightly-more-readable breakdown of the following ipVFourRegex-
+    #   The string group '(250-255|200-249|100-199|0-99).' three times, followed by the
+    #   string group '(250-255|200-249|100-199|0-99)' one time, with no further digits.
+    ipVFourRegex = r'((([2][5][0-5]|[2][0-4]\d|[1]\d{2}|\d{1,2})\.){3})([2][5][0-5]|[2][0-4]\d|[1]\d{2}|\d{1,2}(\D|$)){1}'
+    
     # NOTE: For now, if the string contains a colon (':'), it's considered an IPv6 address.
     # TODO: May need a real IPv6 regex if we want to validate/store those at some point...
-    ipVFourRegex = r'((([2][5][0-5]|[2][0-4]\d|[1]\d{2}|\d{1,2})\.){3})([2][5][0-5]|[2][0-4]\d|[1]\d{2}|\d{1,2}(\D|$)){1}'
     if((len(lineData) > 1) and ((':' in lineData[0]) or re.match(ipVFourRegex, lineData[0]))):
         domain = lineData[1]
     else:
